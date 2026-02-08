@@ -110,3 +110,4 @@ public abstract class StatsScreenMixin extends Screen
 		return Component.translatable("options.accessibility.title");
 	}
 }
+
