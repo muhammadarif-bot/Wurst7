@@ -23,6 +23,7 @@ import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.achievement.StatsScreen;
+import net.minecraft.client.gui.screens.options.AccessibilityOptionsScreen; // ADDED THIS LINE
 import net.minecraft.network.chat.Component;
 import net.wurstclient.WurstClient;
 import net.wurstclient.options.WurstOptionsScreen;
@@ -63,7 +64,8 @@ public abstract class StatsScreenMixin extends Screen
 		doneButton.setWidth(100);
 		hLayout.addChild(doneButton);
 		
-		if(wurst.getOtfs().wurstOptionsOtf.isVisibleInStatistics())
+		// Changed to false to hide the "Wurst Options" button
+		if(false) 
 		{
 			layout.setFooterHeight(58);
 			wurstOptionsButton = WurstClient.INSTANCE.getOtfs().wurstOptionsOtf
@@ -80,8 +82,12 @@ public abstract class StatsScreenMixin extends Screen
 	private void onRender(GuiGraphics context, int mouseX, int mouseY,
 		float partialTicks, CallbackInfo ci)
 	{
-		WurstClient.INSTANCE.getOtfs().wurstOptionsOtf
-			.drawWurstLogoOnButton(context, wurstOptionsButton);
+		// Safe check to prevent crash since wurstOptionsButton is now null
+		if(wurstOptionsButton != null)
+		{
+			WurstClient.INSTANCE.getOtfs().wurstOptionsOtf
+				.drawWurstLogoOnButton(context, wurstOptionsButton);
+		}
 	}
 	
 	@Unique
@@ -93,18 +99,14 @@ public abstract class StatsScreenMixin extends Screen
 	@Unique
 	private void toggleWurst(Button toggleButton)
 	{
-		WurstClient wurst = WurstClient.INSTANCE;
-		wurst.setEnabled(!wurst.isEnabled());
-		toggleButton.setMessage(getToggleButtonText());
-		if(wurstOptionsButton != null)
-			wurstOptionsButton.active = wurst.isEnabled();
+		// Opens Accessibility menu instead of disabling Wurst
+		minecraft.setScreen(new AccessibilityOptionsScreen(this, minecraft.options));
 	}
 	
 	@Unique
 	private Component getToggleButtonText()
 	{
-		WurstClient wurst = WurstClient.INSTANCE;
-		String text = (wurst.isEnabled() ? "Disable" : "Enable") + " Wurst";
-		return Component.literal(text);
+		// Returns "Accessibility Settings" text
+		return Component.translatable("options.accessibility.title");
 	}
 }
