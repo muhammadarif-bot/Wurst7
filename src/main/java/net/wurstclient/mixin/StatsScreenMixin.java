@@ -23,7 +23,7 @@ import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.achievement.StatsScreen;
-import net.minecraft.client.gui.screens.options.AccessibilityOptionsScreen; // ADDED THIS LINE
+import net.minecraft.client.gui.screens.options.AccessibilityOptionsScreen;
 import net.minecraft.network.chat.Component;
 import net.wurstclient.WurstClient;
 import net.wurstclient.options.WurstOptionsScreen;
@@ -65,7 +65,7 @@ public abstract class StatsScreenMixin extends Screen
 		hLayout.addChild(doneButton);
 		
 		// Changed to false to hide the "Wurst Options" button
-		if(false) 
+		if(false)
 		{
 			layout.setFooterHeight(58);
 			wurstOptionsButton = WurstClient.INSTANCE.getOtfs().wurstOptionsOtf
@@ -82,7 +82,7 @@ public abstract class StatsScreenMixin extends Screen
 	private void onRender(GuiGraphics context, int mouseX, int mouseY,
 		float partialTicks, CallbackInfo ci)
 	{
-		// Safe check to prevent crash since wurstOptionsButton is now null
+		// Only draw the logo if the button actually exists
 		if(wurstOptionsButton != null)
 		{
 			WurstClient.INSTANCE.getOtfs().wurstOptionsOtf
@@ -100,14 +100,13 @@ public abstract class StatsScreenMixin extends Screen
 	private void toggleWurst(Button toggleButton)
 	{
 		// Opens Accessibility menu instead of disabling Wurst
-		minecraft.setScreen(new AccessibilityOptionsScreen(this, minecraft.options));
+		minecraft
+			.setScreen(new AccessibilityOptionsScreen(this, minecraft.options));
 	}
 	
 	@Unique
 	private Component getToggleButtonText()
 	{
-		// Returns "Accessibility Settings" text
 		return Component.translatable("options.accessibility.title");
 	}
 }
-
